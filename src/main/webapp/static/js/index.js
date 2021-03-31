@@ -190,6 +190,8 @@ new Vue({
 		updateEmp:function() {
 		
 			
+		},
+		submitUpdateEmpForm: function() {
 		}
 
 	},
