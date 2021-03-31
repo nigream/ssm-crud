@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="/ssm-crud/static/js/jquery-3.5.1.js"></script>
+<link href="/ssm-crud/static/bootstrap-3.3.7-dist/css/bootstrap.css"
+	rel="stylesheet" />
+<script type="text/javascript"
+	src="/ssm-crud/static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+<script src="/ssm-crud/static/js/vuejs-2.5.16.js"></script>
+<script src="/ssm-crud/static/js/axios-0.18.0.js"></script>
+</head>
+
+<body>
+	<div id="app">
+		<div class="container" style="border: 1px solid black">
+
+			<!-- 标题 -->
+			<div class="row">
+				<div class="col-md-12">
+					<h1>SSM-CRUD</h1>
+				</div>
+			</div>
+
+			<!-- 新增、删除按钮 -->
+			<div class="row">
+				<div class="col-md-2 col-md-offset-10" align="right">
+					<button type="button" class="btn btn-primary"
+						v-on:click="showEmpAddModal">新增</button>
+					<button type="button" class="btn btn-danger">删除</button>
+				</div>
+			</div>
+
+			<!-- 添加员工模态框 -->
+			<div class="modal fade" id="empAddModal" tabindex="-1" role="dialog"
+				aria-labelledby="empAddModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="empAddModalLabel">新增员工</h4>
+						</div>
+						<div class="modal-body">
+							<form class="form-horizontal" id="addEmpForm">
+
+								<div class="form-group">
+									<label for="inputEmpName" class="col-sm-2 control-label">用户名</label>
+									<div class="col-sm-8 has-feedback">
+										<input v-on:blur="empNameOnBlur" type=text name="empName"
+											class="form-control" id="inputEmpName" placeholder="张三">
+											<!-- aria-describedby="empNameSuccessStatus" --> 
+										<span class="help-block"></span> 
+										<span class="glyphicon form-control-feedback" id="empNameSuccessStatus"
+											aria-hidden="true">
+										</span> 
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="inputEmpGender" class="col-sm-2 control-label">性别</label>
+									<div class="col-sm-8">
+										<label class="radio-inline"> <input type="radio"
+											name="gender" id="maleRadio" checked="checked" value="M">
+											男
+										</label> <label class="radio-inline"> <input type="radio"
+											name="gender" id="femaleRadio" value="F"> 女
+										</label>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="inputEmpEmail" class="col-sm-2 control-label">邮箱</label>
+									<div class="col-sm-8 has-feedback">
+										<input v-on:blur="empEmailOnBlur" type="email" name="email"
+											class="form-control" id="inputEmpEmail"
+											placeholder="xxxx@xxx.xxx"> 
+										<span class="help-block"></span>
+										<span class="glyphicon form-control-feedback" id="empEmailSuccessStatus"
+											aria-hidden="true">
+										</span> 
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<label for="inputDepartment" class="col-sm-2 control-label">部门</label>
+									<div class="col-sm-4">
+										<select class="form-control" name="dId">
+											<template v-for="department in departmentList">
+												<option v-bind:value="department.deptId">
+													{{department.deptName}}</option>
+											</template>
+										</select>
+									</div>
+								</div>
+
+
+
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal">关闭</button>
+							<button type="button" v-on:click="submitAddEmpForm"
+								class="btn btn-primary">保存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 编辑员工模态框 -->
+			<div class="modal fade" id="empUpdateModal" tabindex="-1" role="dialog"
+				aria-labelledby="empUpdateModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="empUpdateModalLabel">新增员工</h4>
+						</div>
+						<div class="modal-body">
+							<form class="form-horizontal" id="addEmpForm">
+
+								<div class="form-group">
+									<label for="inputEmpName" class="col-sm-2 control-label">用户名</label>
+									<div class="col-sm-8 has-feedback">
+										<input v-on:blur="empNameOnBlur" type=text name="empName"
+											class="form-control" id="inputEmpName" placeholder="张三">
+											<!-- aria-describedby="empNameSuccessStatus" --> 
+										<span class="help-block"></span> 
+										<span class="glyphicon form-control-feedback" id="empNameSuccessStatus"
+											aria-hidden="true">
+										</span> 
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="inputEmpGender" class="col-sm-2 control-label">性别</label>
+									<div class="col-sm-8">
+										<label class="radio-inline"> <input type="radio"
+											name="gender" id="maleRadio" checked="checked" value="M">
+											男
+										</label> <label class="radio-inline"> <input type="radio"
+											name="gender" id="femaleRadio" value="F"> 女
+										</label>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="inputEmpEmail" class="col-sm-2 control-label">邮箱</label>
+									<div class="col-sm-8 has-feedback">
+										<input v-on:blur="empEmailOnBlur" type="email" name="email"
+											class="form-control" id="inputEmpEmail"
+											placeholder="xxxx@xxx.xxx"> 
+										<span class="help-block"></span>
+										<span class="glyphicon form-control-feedback" id="empEmailSuccessStatus"
+											aria-hidden="true">
+										</span> 
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<label for="inputDepartment" class="col-sm-2 control-label">部门</label>
+									<div class="col-sm-4">
+										<select class="form-control" name="dId">
+											<template v-for="department in departmentList">
+												<option v-bind:value="department.deptId">
+													{{department.deptName}}</option>
+											</template>
+										</select>
+									</div>
+								</div>
+
+
+
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal">关闭</button>
+							<button type="button" v-on:click="submitUpdateEmpForm"
+								class="btn btn-primary">保存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+
+			<!-- 数据 -->
+			<div class="row">
+				<div class="col-md-12">
+					<table class="table">
+						<tr>
+							<th>#</th>
+							<th>用户名</th>
+							<th>性别</th>
+							<th>邮箱</th>
+							<th>部门</th>
+							<th>操作</th>
+						</tr>
+						<template v-for="emp in empList">
+							<tr>
+								<td>{{emp.empId}}</td>
+								<td>{{emp.empName}}</td>
+								<td>{{emp.gender == 'M'?'男':'女'}}</td>
+								<td>{{emp.email}}</td>
+								<td>{{emp.department.deptName}}</td>
+								<td>
+									<button v-on:click="updateEmp" type="button" class="btn btn-primary btn-sm">
+										<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+										编辑
+									</button>
+									<button type="button" class="btn btn-danger btn-sm">
+										<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+										删除
+									</button>
+								</td>
+							</tr>
+						</template>
+					</table>
+				</div>
+			</div>
+
+			<!-- 分页条 -->
+			<div class="row">
+				<div class="col-md-6" align="left">
+					共有 <b>{{pageInfo.total}}</b> 条数据，当前在第 <b>{{pageInfo.pageNum}}</b>
+					页(共 <b>{{pageInfo.pages}}</b> 页)
+				</div>
+				<div class="col-md-6" align="right">
+					<nav aria-label="Page navigation">
+						<ul class="pagination">
+							<!-- 判断是否为第一页，若为第一页，则禁用首页按钮 -->
+							<li v-if="pageInfo.isFirstPage" class="disabled"><a>首页</a></li>
+							<li v-if="!pageInfo.isFirstPage"><a
+								v-on:click="getAllEmps(1)" href="javascript:;">首页</a></li>
+							<!-- 判断是否为第一页，若为第一页，则禁用上一页按钮 -->
+							<li v-if="pageInfo.isFirstPage" class="disabled"><a
+								aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+							</a></li>
+							<li v-if="!pageInfo.isFirstPage"><a
+								v-on:click="getAllEmps(pageInfo.pageNum-1)"
+								aria-label="Previous" href="javascript:;"> <span
+									aria-hidden="true">&laquo;</span>
+							</a></li>
+							<template v-for="navigatepageNum in pageInfo.navigatepageNums">
+								<!-- 判断是否为当前页，若为当前页，则令当前页码高亮 -->
+								<li v-if="pageInfo.pageNum === navigatepageNum" class="active">
+									<a v-on:click="getAllEmps(navigatepageNum)" href="javascript:;">
+										{{navigatepageNum}} </a>
+								</li>
+								<li v-if="pageInfo.pageNum != navigatepageNum"><a
+									v-on:click="getAllEmps(navigatepageNum)" href="javascript:;">
+										{{navigatepageNum}} </a></li>
+							</template>
+							<!-- 判断是否为最后一页，若为最后一页，则禁用下一页按钮 -->
+							<li v-if="pageInfo.isLastPage" class="disabled"><a
+								aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+							</a></li>
+							<li v-if="!pageInfo.isLastPage"><a
+								v-on:click="getAllEmps(pageInfo.pageNum+1)" href="javascript:;"
+								aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+							</a></li>
+							<!-- 判断是否为最后一页，若为最后一页，则禁用某页按钮 -->
+							<li v-if="pageInfo.isLastPage" class="disabled"><a>末页</a></li>
+							<li v-if="!pageInfo.isLastPage"><a
+								v-on:click="getAllEmps(pageInfo.pages)" href="javascript:;">末页</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="/ssm-crud/static/js/index.js"></script>
+
+</html>

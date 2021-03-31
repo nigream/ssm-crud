@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>list</title>
+<script type="text/javascript" src="static/js/jquery-3.5.1.js"></script>
+<link href="static/bootstrap-3.3.7-dist/css/bootstrap.css" />
+<script type="text/javascript"
+	src="static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+
+<script src="static/js/vuejs-2.5.16.js"></script>
+<script src="static/js/axios-0.18.0.js"></script>
+</head>
+<body>
+<!-- 	<div id="app">
+		<ul class="nav nav-tabs" role="tablist">
+			<template v-for="(item,index) in empList">
+				<li role="presentation" class="active"> {{item.empName}} </li>
+			</template>
+		</ul>
+
+	</div> -->
+	listnidayede
+</body>
+<script type="text/javascript">
+	new Vue({
+		el : "#app",
+		data : {
+			empList : "",
+
+		},
+		methods:{
+	        getAllEmps:function(){
+	            var me = this;
+	            axios.get("/ssm-crud/employee/findAll").then(function (response) {
+	                me.empList = response.data;
+	            }).catch(function (err) {
+	                console.log(err);
+	            });
+	        },
+		},
+		created:function(){
+			this.getAllEmps();
+		}
+	});
+</script>
+</html>

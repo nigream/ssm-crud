@@ -1,0 +1,6 @@
+## .gitignore for eclipse
+/.classpath
+/.project
+/.springBeans
+/.settings/
+/target/
