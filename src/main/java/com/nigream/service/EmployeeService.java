@@ -13,4 +13,9 @@ public interface EmployeeService {
 	List<Employee> findAll();
 	void saveOne(Employee employee);
 	Boolean checkEmpName(String empName);
+	Employee findById(Integer empId); 
+	Employee findByIdWithDept(Integer empId); 
+	void updateById(Employee employee);
+	void deleteById(Integer empId);
+	void deleteByIds(List<Integer> ids);
 }

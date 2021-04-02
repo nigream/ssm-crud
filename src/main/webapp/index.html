@@ -24,12 +24,14 @@
 				</div>
 			</div>
 
+
+
 			<!-- 新增、删除按钮 -->
 			<div class="row">
 				<div class="col-md-2 col-md-offset-10" align="right">
 					<button type="button" class="btn btn-primary"
 						v-on:click="showEmpAddModal">新增</button>
-					<button type="button" class="btn btn-danger">删除</button>
+					<button v-on:click="deleteChecked()" type="button" class="btn btn-danger">删除</button>
 				</div>
 			</div>
 
@@ -53,11 +55,10 @@
 									<div class="col-sm-8 has-feedback">
 										<input v-on:blur="empNameOnBlur" type=text name="empName"
 											class="form-control" id="inputEmpName" placeholder="张三">
-											<!-- aria-describedby="empNameSuccessStatus" --> 
-										<span class="help-block"></span> 
-										<span class="glyphicon form-control-feedback" id="empNameSuccessStatus"
-											aria-hidden="true">
-										</span> 
+										<!-- aria-describedby="empNameSuccessStatus" -->
+										<span class="help-block"></span> <span
+											class="glyphicon form-control-feedback"
+											id="empNameSuccessStatus" aria-hidden="true"> </span>
 									</div>
 								</div>
 
@@ -78,11 +79,9 @@
 									<div class="col-sm-8 has-feedback">
 										<input v-on:blur="empEmailOnBlur" type="email" name="email"
 											class="form-control" id="inputEmpEmail"
-											placeholder="xxxx@xxx.xxx"> 
-										<span class="help-block"></span>
-										<span class="glyphicon form-control-feedback" id="empEmailSuccessStatus"
-											aria-hidden="true">
-										</span> 
+											placeholder="xxxx@xxx.xxx"> <span class="help-block"></span>
+										<span class="glyphicon form-control-feedback"
+											id="empEmailSuccessStatus" aria-hidden="true"> </span>
 									</div>
 								</div>
 
@@ -114,8 +113,8 @@
 			</div>
 
 			<!-- 编辑员工模态框 -->
-			<div class="modal fade" id="empUpdateModal" tabindex="-1" role="dialog"
-				aria-labelledby="empUpdateModalLabel">
+			<div class="modal fade" id="empUpdateModal" tabindex="-1"
+				role="dialog" aria-labelledby="empUpdateModalLabel">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -123,46 +122,39 @@
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<h4 class="modal-title" id="empUpdateModalLabel">新增员工</h4>
+							<h4 class="modal-title" id="empUpdateModalLabel">更改员工信息</h4>
 						</div>
 						<div class="modal-body">
-							<form class="form-horizontal" id="addEmpForm">
+							<form class="form-horizontal" id="updateEmpForm">
 
 								<div class="form-group">
-									<label for="inputEmpName" class="col-sm-2 control-label">用户名</label>
+									<label for="inputEmpName2" class="col-sm-2 control-label">用户名</label>
 									<div class="col-sm-8 has-feedback">
-										<input v-on:blur="empNameOnBlur" type=text name="empName"
-											class="form-control" id="inputEmpName" placeholder="张三">
-											<!-- aria-describedby="empNameSuccessStatus" --> 
-										<span class="help-block"></span> 
-										<span class="glyphicon form-control-feedback" id="empNameSuccessStatus"
-											aria-hidden="true">
-										</span> 
+										<p class="form-control-static">{{emp.empName}}</p>
 									</div>
 								</div>
 
 								<div class="form-group">
-									<label for="inputEmpGender" class="col-sm-2 control-label">性别</label>
+									<label for="inputEmpGender2" class="col-sm-2 control-label">性别</label>
 									<div class="col-sm-8">
 										<label class="radio-inline"> <input type="radio"
-											name="gender" id="maleRadio" checked="checked" value="M">
-											男
+											v-model="emp.gender" name="gender" id="maleRadio2"
+											checked="checked" value="M"> 男
 										</label> <label class="radio-inline"> <input type="radio"
-											name="gender" id="femaleRadio" value="F"> 女
+											v-model="emp.gender" name="gender" id="femaleRadio2"
+											value="F"> 女
 										</label>
 									</div>
 								</div>
 
 								<div class="form-group">
-									<label for="inputEmpEmail" class="col-sm-2 control-label">邮箱</label>
+									<label for="inputEmpEmail2" class="col-sm-2 control-label">邮箱</label>
 									<div class="col-sm-8 has-feedback">
-										<input v-on:blur="empEmailOnBlur" type="email" name="email"
-											class="form-control" id="inputEmpEmail"
-											placeholder="xxxx@xxx.xxx"> 
-										<span class="help-block"></span>
-										<span class="glyphicon form-control-feedback" id="empEmailSuccessStatus"
-											aria-hidden="true">
-										</span> 
+										<input v-on:blur="empEmailOnBlur2" type="email" name="email"
+											class="form-control" id="inputEmpEmail2" v-model="emp.email"
+											placeholder="xxxx@xxx.xxx"> <span class="help-block"></span>
+										<span class="glyphicon form-control-feedback"
+											id="empEmailSuccessStatus2" aria-hidden="true"> </span>
 									</div>
 								</div>
 
@@ -170,7 +162,7 @@
 								<div class="form-group">
 									<label for="inputDepartment" class="col-sm-2 control-label">部门</label>
 									<div class="col-sm-4">
-										<select class="form-control" name="dId">
+										<select class="form-control" name="dId" v-model="emp.dId">
 											<template v-for="department in departmentList">
 												<option v-bind:value="department.deptId">
 													{{department.deptName}}</option>
@@ -186,39 +178,110 @@
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default"
 								data-dismiss="modal">关闭</button>
-							<button type="button" v-on:click="submitUpdateEmpForm"
+							<button type="button" v-on:click="submitUpdateEmpForm(emp.empId)"
 								class="btn btn-primary">保存</button>
 						</div>
 					</div>
 				</div>
 			</div>
-			
+
+			<!-- 删除确认模态框 -->
+			<div class="modal fade" id="empDeleteModal" tabindex="-1"
+				role="dialog" aria-labelledby="empDeleteModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="empDeleteModalLabel">确定要删除该条员工数据吗？</h4>
+						</div>
+						<div class="modal-body">
+							<form class="form-horizontal" id="deleteEmpForm">
+							
+								<div class="form-group">
+									<label  class="col-sm-2 control-label">用户Id</label>
+									<div class="col-sm-8 has-feedback">
+										<p class="form-control-static">{{emp.empId}}</p>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label">用户名</label>
+									<div class="col-sm-8 has-feedback">
+										<p class="form-control-static">{{emp.empName}}</p>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label">性别</label>
+									<div class="col-sm-8">
+										<p class="form-control-static">{{emp.gender}}</p>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-2 control-label">邮箱</label>
+									<div class="col-sm-8">
+										<p class="form-control-static">{{emp.email}}</p>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-2 control-label">部门</label>
+									<div class="col-sm-8">
+										<p class="form-control-static">{{emp.department.deptName}}</p>
+									</div>
+								</div>
+
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal">取消</button>
+							<button type="button" v-on:click="deleteOneEmp(emp.empId)"
+								class="btn btn-primary">确定</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
 
 			<!-- 数据 -->
 			<div class="row">
 				<div class="col-md-12">
 					<table class="table">
 						<tr>
-							<th>#</th>
+							<th>
+								<input type="checkbox" id="check_all" v-on:change="checkAll()" 
+								v-bind:checked="checkedIds.length === empList.length && checkedIds.length !== 0">
+							</th>
+							<th>#行号</th>
+							<th>Id</th>
 							<th>用户名</th>
 							<th>性别</th>
 							<th>邮箱</th>
 							<th>部门</th>
 							<th>操作</th>
 						</tr>
-						<template v-for="emp in empList">
+						<template v-for="(emp,index) in empList">
 							<tr>
+								<td><input type="checkbox" v-model="checkedIds" v-bind:value="emp.empId"></td>
+								<td>{{(pageInfo.pageNum-1)*pageInfo.pageSize + index + 1}}</td>
 								<td>{{emp.empId}}</td>
 								<td>{{emp.empName}}</td>
 								<td>{{emp.gender == 'M'?'男':'女'}}</td>
 								<td>{{emp.email}}</td>
 								<td>{{emp.department.deptName}}</td>
 								<td>
-									<button v-on:click="updateEmp" type="button" class="btn btn-primary btn-sm">
+									<button v-on:click="showEmpUpdateModal(emp.empId)"
+										type="button" class="btn btn-primary btn-sm">
 										<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
 										编辑
 									</button>
-									<button type="button" class="btn btn-danger btn-sm">
+									<button v-on:click="showDeleteAddModal(emp.empId)"
+										type="button" class="btn btn-danger btn-sm">
 										<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
 										删除
 									</button>

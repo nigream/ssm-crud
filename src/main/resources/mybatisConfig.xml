@@ -12,7 +12,7 @@
 	
 	<plugins>
 		<plugin interceptor="com.github.pagehelper.PageInterceptor">
-			<!-- <property name="param1" value="value1"/> -->
+			<property name="reasonable" value="true"/>
 		</plugin>
 	</plugins>
 </configuration>
